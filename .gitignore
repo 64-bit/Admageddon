@@ -3,6 +3,10 @@
 #Asset store assets that cannot be re-dstributed with a MIT project
 /[Aa]ssets/AssetStore/
 
+#Datasets will not be commited to the repository and will be distributed seperately
+/[Aa]ssets/Datasets/
+
+
 #Jet brains IDE related files
 /.idea/
 
