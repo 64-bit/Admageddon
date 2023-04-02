@@ -10,7 +10,7 @@ namespace Admageddon
     {
         // Start is called before the first frame update
         private MeshRenderer _meshRenderer;
-        private Material[] _localMaterials;
+        private static int _backgroundColorId = Shader.PropertyToID("_BackgroundColor");
 
         /// <summary>
         /// This should be set to the same index as the mesh renderer material that should display the surface content
@@ -20,9 +20,9 @@ namespace Admageddon
         private void Awake()
         {
             _meshRenderer = GetComponent<MeshRenderer>();
-            _localMaterials = _meshRenderer.materials;
+            var materials = _meshRenderer.materials;
             
-            if (AdSurfaceMaterialIndex >= _localMaterials.Length)
+            if (AdSurfaceMaterialIndex >= materials.Length)
             {
                 Debug.LogError("AdSurfaceMaterialIndex is out of range");
             }
@@ -30,9 +30,14 @@ namespace Admageddon
 
         public void SetSurfaceContent(Texture surfaceTexture, Color segmentationColor)
         {
-            _localMaterials[AdSurfaceMaterialIndex].SetTexture("_MainTex", surfaceTexture);
-            _localMaterials[AdSurfaceMaterialIndex].SetSegmentationColor(segmentationColor);
-            _meshRenderer.materials = _localMaterials;
+            var materials = _meshRenderer.materials;
+            
+            materials[AdSurfaceMaterialIndex].SetTexture("_MainTex", surfaceTexture);
+            materials[AdSurfaceMaterialIndex].SetSegmentationColor(segmentationColor);
+            //Set the background to a random color with solid alpha
+            materials[AdSurfaceMaterialIndex].SetColor(_backgroundColorId, new Color(UnityEngine.Random.value, UnityEngine.Random.value, UnityEngine.Random.value, 1.0f));
+            
+            _meshRenderer.materials = materials;
         }
     }
 }
