@@ -1,4 +1,11 @@
 # This .gitignore file should be placed at the root of your Unity project directory
+
+#Asset store assets that cannot be re-dstributed with a MIT project
+/[Aa]ssets/AssetStore/
+
+#Jet brains IDE related files
+/.idea/
+
 #
 # Get latest from https://github.com/github/gitignore/blob/main/Unity.gitignore
 #
