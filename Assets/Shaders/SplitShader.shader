@@ -1,9 +1,9 @@
-Shader "Unlit/SegmentationShader"
+Shader "Unlit/SplitShader"
 {
     Properties
     {
         _MainTex ("Texture", 2D) = "white" {}
-        _SegmentationColor ("Segmentation Color", Color) = (1,0,0,1)
+        _SplitTex_SplitTex ("Split Texture", 2D) = "white" {}
     }
     SubShader
     {
@@ -11,9 +11,7 @@ Shader "Unlit/SegmentationShader"
         LOD 100
 
         Pass
-        {   
-            Tags { "RenderType"="Opaque" }
-
+        {
             CGPROGRAM
             #pragma vertex vert
             #pragma fragment frag
@@ -36,8 +34,8 @@ Shader "Unlit/SegmentationShader"
             };
 
             sampler2D _MainTex;
+            sampler2D _SplitTex;
             float4 _MainTex_ST;
-            float4 _SegmentationColor;
 
             v2f vert (appdata v)
             {
@@ -50,7 +48,20 @@ Shader "Unlit/SegmentationShader"
 
             fixed4 frag (v2f i) : SV_Target
             {
-                return float4(_SegmentationColor.rgb,1.0);
+                float4 color;
+                float2 uv = i.uv;
+                if(i.uv.x < 0.5)
+                {;
+                    uv.x = i.uv.x * 2.0;
+                    color = tex2D(_MainTex, uv);
+                }
+                else
+                {
+                    uv.x = (i.uv.x - 0.5) * 2.0;
+                    color = tex2D(_SplitTex, uv);
+                }
+
+                return color;
             }
             ENDCG
         }
