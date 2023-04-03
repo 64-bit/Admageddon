@@ -11,4 +11,9 @@ namespace Admageddon
     {
         void SetSurfaceContent(Texture surfaceTexture, Color segmentationColor);
     }
+
+    public interface IDropout
+    {
+        void SetIsEnabled(bool isEnabled);
+    }
 }

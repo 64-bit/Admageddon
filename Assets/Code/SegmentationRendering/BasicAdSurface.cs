@@ -17,6 +17,7 @@ namespace Admageddon
         /// </summary>
         public int AdSurfaceMaterialIndex;
         
+        
         private void Awake()
         {
             _meshRenderer = GetComponent<MeshRenderer>();

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Admageddon;
 using UnityEngine;
+using System.Linq;
 
 public class AdSurfaceController : MonoBehaviour
 {
@@ -13,6 +14,16 @@ public class AdSurfaceController : MonoBehaviour
     public List<Texture> NotAds;
 
     public float AdFraction = 0.75f;
+    public float DropoutEnabledFraction = 0.75f;
+
+    private IEnumerable<IAdSurface> _adCache;
+    private IEnumerable<IDropout> _dropouts;
+
+    void Awake()
+    {
+        _adCache = FindObjectsOfType<GameObject>().SelectMany(go => go.GetComponents<IAdSurface>()).ToList();
+        _dropouts = FindObjectsOfType<GameObject>().SelectMany(go => go.GetComponents<IDropout>()).ToList();
+    }
     
     void Start()
     {
@@ -29,7 +40,12 @@ public class AdSurfaceController : MonoBehaviour
 
     public void ReRollAllAds()
     {
-        foreach (var adSurface in GetComponentsInChildren<IAdSurface>())
+        foreach (var obj in _dropouts)
+        {
+            obj.SetIsEnabled(Random.value < DropoutEnabledFraction);
+        }
+        
+        foreach (var adSurface in _adCache)
         {
             SetAdSurface(adSurface);
         }
