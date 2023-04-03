@@ -73,17 +73,28 @@ namespace Admageddon
 
         IEnumerator CaptureProcess(int count, float timeStep)
         {
+            PreGrabFrame?.Invoke();
+            yield return null;
+            
+            float startTime = Time.realtimeSinceStartup;
             for (int i = 0; i < count; i++)
             {
                 PreGrabFrame?.Invoke();
-                yield return null;
                 GetImagesForFrame(i);
-                Debug.Log($"Frames remaining:{count - i}");
+                if (i % 100 == 0)
+                {
+                    Debug.Log($"Frames remaining:{count - i}");
+                }
                 yield return new WaitForSeconds(timeStep);
             }
 
             _isGrabbing = false;
             Debug.Log($"Finished capturing {count} frames");
+            
+            float endTime = Time.realtimeSinceStartup;
+            float duration = endTime - startTime;
+            
+            Debug.Log($"Capture took {duration} seconds and produced frames at {count / duration} fps");
         }
 
         private void GetImagesForFrame(int frame)

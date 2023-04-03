@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace Admageddon
@@ -26,6 +27,22 @@ namespace Admageddon
                 Debug.LogError("Source camera must have a Render Texture assigned.");
                 enabled = false;
                 return;
+            }
+        }
+
+        private void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.F1))
+            {
+                DisplayMode = EDisplayMode.Source;
+            }
+            else if (Input.GetKeyDown(KeyCode.F2))
+            {
+                DisplayMode = EDisplayMode.Segmentation;
+            }
+            else if (Input.GetKeyDown(KeyCode.F3))
+            {
+                DisplayMode = EDisplayMode.SplitScreen;
             }
         }
 
